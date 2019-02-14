@@ -14,7 +14,6 @@ ArrayList<Person> people;
  
  void draw() {
    background(128);
-   
    //noStroke();
    //fill(192);
    //ellipse(mouseX,mouseY,mouseX,mouseY);
