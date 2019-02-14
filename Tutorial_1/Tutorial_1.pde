@@ -1,14 +1,25 @@
 ArrayList<Person> people;
+ArrayList<Connection> friends;
  
  void setup() {
    size(800, 600);
    
    people = new ArrayList<Person>();
+   friends = new ArrayList<Connection>();
    
    for (int i = 0; i < 10; i++) {
      Person p = new Person("Person " + i, str(int(random(1,5))));
      p.randomLocation();
      people.add(p);
+   }
+   
+   for (Person origin : people) {
+     for (Person destination : people) {
+       if (origin.year.equals(destination.year) && !origin.name.equals(destination)) {
+         Connection c = new Connection(origin, destination, "frand");
+         friends.add(c);
+       }
+     }
    }
  }
  
@@ -21,6 +32,10 @@ ArrayList<Person> people;
    for (Person p : people) {
      p.update();
      p.draw();
+   }
+   
+   for (Connection c : friends) {
+     c.draw();
    }
  }
  
