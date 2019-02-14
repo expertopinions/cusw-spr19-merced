@@ -3,6 +3,27 @@ ArrayList<Connection> friends;
  
  void setup() {
    size(800, 600);
+   initialize();
+ }
+ 
+ void draw() {
+   background(128);
+   //noStroke();
+   //fill(192);
+   //ellipse(mouseX,mouseY,mouseX,mouseY);
+   
+   for (Person p : people) {
+     p.update();
+     p.draw();
+   }
+   
+   for (Connection c : friends) {
+     c.draw();
+   }
+ }
+ 
+ void initialize() {
+      size(800, 600);
    
    people = new ArrayList<Person>();
    friends = new ArrayList<Connection>();
@@ -23,22 +44,6 @@ ArrayList<Connection> friends;
    }
  }
  
- void draw() {
-   background(128);
-   //noStroke();
-   //fill(192);
-   //ellipse(mouseX,mouseY,mouseX,mouseY);
-   
-   for (Person p : people) {
-     p.update();
-     p.draw();
-   }
-   
-   for (Connection c : friends) {
-     c.draw();
-   }
- }
- 
  void mousePressed() {
    for (Person p : people) {
      if (p.checkSelection()) {
@@ -51,4 +56,8 @@ ArrayList<Connection> friends;
    for (Person p : people) {
      p.locked = false;
    }
+ }
+ 
+ void keyPressed() {
+   initialize();
  }
