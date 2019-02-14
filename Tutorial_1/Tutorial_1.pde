@@ -15,7 +15,7 @@ ArrayList<Connection> friends;
    
    for (Person origin : people) {
      for (Person destination : people) {
-       if (origin.year.equals(destination.year) && !origin.name.equals(destination)) {
+       if (origin.year.equals(destination.year) && !origin.name.equals(destination.name)) {
          Connection c = new Connection(origin, destination, "frand");
          friends.add(c);
        }
