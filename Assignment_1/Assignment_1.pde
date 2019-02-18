@@ -1,8 +1,13 @@
+float hue = 0;
+float saturation = 0;
+float value = 1;
+
 void setup() {
   size(640,360);
 }
 
 void draw() {
+  colorMode(HSB, 1.0);
   background(0);
   
   PFont f = createFont("Monaco", 128, true);
@@ -10,29 +15,42 @@ void draw() {
   textAlign(CENTER);
   text(hour() + ":" + String.format("%02d", minute())
   + ":" + String.format("%02d", second()), width/2, height/2+32);
+  
+  PFont g = createFont("Monaco", 12, true);
+  textFont(g, 12);
+  textAlign(LEFT);
+  text("hue: " + hue + "  saturation: " + saturation + " value: " + value, 0, height-3);
 }
 
-void keyTyped() {
+void keyPressed() {
   if (key == 'r') {
-    colorMode(RGB);
-    fill(255,0,0);
+    hue = 0;
+    saturation = 1;
+    value = 1;
+    fill(hue, saturation, value);
   }
   else if (key == 'g') {
-    colorMode(RGB);
-    fill(0,192,0);
+    hue = .33;
+    saturation = 1;
+    value = .75;
+    fill(hue, saturation, value);
   }
   else if (key == 'b') {
-    colorMode(RGB);
-    fill(30,75,255);
+    hue = 228./360;
+    saturation = .88;
+    value = 1;
+    fill(hue, saturation, value);
   }
   else if (key == 'w') {
-    colorMode(RGB);
-    fill(255);
+    hue = 0;
+    saturation = 0;
+    value = 1;
+    fill(hue, saturation, value);
   }
   else if (key == 'c') {
-    colorMode(HSB, 1.0);
-    float hue = norm(mouseX, 0, displayWidth);
-    float saturation = norm(mouseY, 0, displayHeight);
-    fill(hue, saturation*.5, 1.);
+    hue = norm(mouseX, 0, width);
+    saturation = norm(mouseY, 0, height);
+    value = 1.;
+    fill(hue, saturation, value);
   }
 }
