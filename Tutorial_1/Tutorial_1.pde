@@ -23,8 +23,6 @@ ArrayList<Connection> friends;
  }
  
  void initialize() {
-      size(800, 600);
-   
    people = new ArrayList<Person>();
    friends = new ArrayList<Connection>();
    
