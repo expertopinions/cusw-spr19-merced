@@ -30,8 +30,7 @@ class Polygon{
     p = createShape();
     p.beginShape();
     p.fill(fill);
-    p.stroke(0);
-    p.strokeWeight(.5);
+    p.noStroke();
     for(int i = 0; i<coordinates.size(); i++){
         PVector screenLocation = map.getScreenLocation(coordinates.get(i));
         p.vertex(screenLocation.x, screenLocation.y);

@@ -14,9 +14,11 @@ void setup() {
 }
 
 void draw() {
-  background(0);
+  background(128);
   int i = 0;
   for (Polygon p : blockGroupPolygons) {
     p.draw();
   }
+  
+  drawInfo();
 }
