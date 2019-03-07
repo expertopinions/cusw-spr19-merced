@@ -1,0 +1,9 @@
+What case study area did you pick and why?
+Cook County, Illinois, because of the L train
+
+What metrics did you pick and why?
+ACS: B08301e2 (number of workers above 16 who took a car, truck or van to work), B08301e1 (number of workers over 16), because I wanted to know how the proportion of workers who drive to work changes as you get closer to Chicago
+
+What statistical test did you use and why?
+
+What was it's result (again not graded for accuracy)?
