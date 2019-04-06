@@ -1,0 +1,3 @@
+enum Intention {
+  ENTERING, EXITING, STATIONARY
+}
