@@ -65,24 +65,80 @@ class Person {
     return waypoints.get((int)random(numWaypoints));
   }
   
-  void setLocation(float dx, float dy) {
-    this.location.x = dx;
-    this.location.y = dy;
+  void collisionDetection(ArrayList<Person> people, Train train) {
+    // reset acceleration before applying all the forces
+    this.acceleration = new PVector(0, 0);
+    
+    for (Person p : people) {
+      if (p == this) continue;
+      
+      if (this.location.dist(p.location) < 2.5 * radius) {
+        PVector displacement = this.displacementVector(p.location);
+        PVector force = displacement.setMag(-0.25/displacement.magSq());
+        this.acceleration.add(force);
+      }
+    }
+    
+    PVector nearestTrainPoint = train.nearestPointOnTrain(this.location);
+    if (nearestTrainPoint.mag() < 1.5 * radius) {
+      PVector displacement = this.displacementVector(nearestTrainPoint);
+      PVector force = displacement.setMag(-0.25/displacement.magSq());
+      this.acceleration.add(force);
+    }
   }
   
-  void setVelocity(float vx, float vy) {
-    this.velocity.x = vx;
-    this.velocity.y = vy;
+  void defaultVelocity() {
+    if (intention == Intention.STATIONARY) this.velocity = new PVector(0,0);
+    
+    PVector displacement = this.displacementVector(this.nearestWaypoint.location);
+    this.velocity = displacement.setMag(5);
   }
   
-  void setAcceleration(float ax, float ay) {
-    this.acceleration.x = ax;
-    this.acceleration.y = ay;
+  /**
+   * Switches the intention of a person if they've been accidentally booted into
+   * or out of a train
+   */
+  private void switchIntention(boolean actuallyInTrain) {
+    if (inTrain == actuallyInTrain) return;
+    
+    else if (intention == Intention.STATIONARY && actuallyInTrain) {
+      intention = Intention.EXITING;
+    }
+    
+    else if (intention == Intention.STATIONARY && ! actuallyInTrain) {
+      intention = Intention.ENTERING;
+    }
   }
   
-  void update() {
+  PVector displacementVector(PVector that) {
+    float dx = that.x - this.location.x;
+    float dy = that.y - this.location.y;
+    return new PVector(dx, dy);
+  }
+  
+  //void setLocation(float dx, float dy) {
+  //  this.location.x = dx;
+  //  this.location.y = dy;
+  //}
+  
+  //void setVelocity(float vx, float vy) {
+  //  this.velocity.x = vx;
+  //  this.velocity.y = vy;
+  //}
+  
+  //void setAcceleration(float ax, float ay) {
+  //  this.acceleration.x = ax;
+  //  this.acceleration.y = ay;
+  //}
+  
+  void update(ArrayList<Person> people, Train train) {
+    defaultVelocity();
+    collisionDetection(people, train);
     velocity.add(acceleration);
     location.add(velocity);
+    
+    boolean actuallyInTrain = train.contains(this.location);
+    switchIntention(actuallyInTrain);
   }
   
   void draw() {

@@ -96,6 +96,11 @@ class Train {
     return points;
   }
   
+  boolean contains(PVector that) {
+    return (that.x > upperLeft.x || that.x < lowerRight.x
+         || that.y > upperLeft.y || that.y < lowerRight.y);
+  }
+  
   /**
    * Returns a random location inside the train. Used for spawning Person agents
    */
@@ -106,6 +111,27 @@ class Train {
     float y2 = lowerRight.y - radius;
     
     return new PVector(random(x1, x2+1), random(y1, y2+1));
+  }
+  
+  /**
+   * Finds the nearest point on the train from some other point
+   * This is super bad and slow
+   */
+  PVector nearestPointOnTrain(PVector point) {
+    float smallestDistance = Float.POSITIVE_INFINITY;
+    PVector closestPoint = points.get(0);
+    PVector result;
+    
+    for (PVector p : points) {
+      float distance = point.dist(p);
+      if (distance < smallestDistance) {
+        smallestDistance = distance;
+        closestPoint = p;
+      }
+    }
+    
+    result = new PVector(closestPoint.x - point.x, closestPoint.y - point.y);
+    return result;
   }
   
   void draw() {
