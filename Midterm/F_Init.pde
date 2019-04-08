@@ -25,11 +25,93 @@ ArrayList<ArrayList<PVector>> getOpenings() {
 }
 
 Platform getPlatform() {
-  return new Platform(new PVector(100, 200), new PVector(700, 600));
+  return new Platform(new PVector(100, 200), new PVector(700, 500));
 }
 
-HashSet<Waypoint> getWaypoints() {
-  HashSet<Waypoint> result = new HashSet<Waypoint>();
+ArrayList<Waypoint> getWaypoints() {
+  ArrayList<Waypoint> waypointList = new ArrayList<Waypoint>();
   
-  return result;
+  // waypoints just before the entrance
+  waypointList.add(new Waypoint(new PVector(215, 190), Intention.ENTERING, false)); // 0
+  waypointList.add(new Waypoint(new PVector(400, 190), Intention.ENTERING, false)); // 1
+  waypointList.add(new Waypoint(new PVector(585, 190), Intention.ENTERING, false)); // 2
+  
+  // waypoints just after the entrance
+  waypointList.add(new Waypoint(new PVector(215, 210), Intention.ENTERING, false)); // 3
+  waypointList.add(new Waypoint(new PVector(400, 210), Intention.ENTERING, false));
+  waypointList.add(new Waypoint(new PVector(585, 210), Intention.ENTERING, false));
+  
+  // waypoints well into the entrance
+  waypointList.add(new Waypoint(new PVector(215, 150), Intention.ENTERING, false)); // 6
+  waypointList.add(new Waypoint(new PVector(400, 150), Intention.ENTERING, false));
+  waypointList.add(new Waypoint(new PVector(585, 150), Intention.ENTERING, false));
+  
+  // waypoints for people in the train to get out of the way
+  waypointList.add(new Waypoint(new PVector(150, 150), Intention.ENTERING, true)); // 9
+  waypointList.add(new Waypoint(new PVector(308, 150), Intention.ENTERING, true));
+  waypointList.add(new Waypoint(new PVector(492, 150), Intention.ENTERING, true));
+  waypointList.add(new Waypoint(new PVector(650, 150), Intention.ENTERING, true));
+  
+  // waypoints well into the platform
+  waypointList.add(new Waypoint(new PVector(215, 300), Intention.EXITING, false)); // 13
+  waypointList.add(new Waypoint(new PVector(400, 300), Intention.EXITING, false));
+  waypointList.add(new Waypoint(new PVector(585, 300), Intention.EXITING, false));
+  
+  // waypoints to "exit" the platform
+  waypointList.add(new Waypoint(new PVector(100, 475), Intention.ENTERING, true)); // 16
+  waypointList.add(new Waypoint(new PVector(400, 475), Intention.ENTERING, true));
+  waypointList.add(new Waypoint(new PVector(700, 475), Intention.ENTERING, true));
+  
+  
+  // linking the waypoints using a whole host of magic numbers
+  waypointList.get(0).addNextOption(waypointList.get(6));
+  waypointList.get(1).addNextOption(waypointList.get(7));
+  waypointList.get(2).addNextOption(waypointList.get(8));
+  
+  waypointList.get(3).addNextOption(waypointList.get(13));
+  waypointList.get(4).addNextOption(waypointList.get(14));
+  waypointList.get(5).addNextOption(waypointList.get(15));
+  
+  waypointList.get(6).addNextOption(waypointList.get(9));
+  waypointList.get(6).addNextOption(waypointList.get(10));
+  waypointList.get(7).addNextOption(waypointList.get(10));
+  waypointList.get(7).addNextOption(waypointList.get(11));
+  waypointList.get(8).addNextOption(waypointList.get(11));
+  waypointList.get(8).addNextOption(waypointList.get(12));
+  
+  waypointList.get(13).addNextOption(waypointList.get(16));
+  waypointList.get(14).addNextOption(waypointList.get(17));
+  waypointList.get(15).addNextOption(waypointList.get(18));
+  
+  return waypointList;
+}
+
+ArrayList<Person> getPeople() {
+  return getPeople(10, 10, .5, .5);
+}
+
+ArrayList<Person> getPeople(int numInTrain, int numOutsideTrain, double p_exit, double p_enter) {
+  ArrayList<Person> people = new ArrayList<Person>();
+  
+  for (int i = 0; i < numInTrain; i++) {
+    Intention intention;
+    if (p_exit > random(1)) {
+      intention = Intention.EXITING;
+    }
+    else intention = Intention.STATIONARY;
+    
+    people.add(new Person(intention, true, waypoints));
+  }
+  
+  for (int i = 0; i < numOutsideTrain; i++) {
+    Intention intention;
+    if (p_enter > random(1)) {
+      intention = Intention.ENTERING;
+    }
+    else intention = Intention.STATIONARY;
+    
+    people.add(new Person(intention, false, waypoints));
+  }
+  
+  return people;
 }

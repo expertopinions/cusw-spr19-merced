@@ -10,11 +10,11 @@ class Person {
   private boolean inTrain;
   // whether the Person is currently trying to enter/exit the train
   
-  Person(Intention intention, boolean inTrain, HashSet<Waypoint> waypoints) {
+  Person(Intention intention, boolean inTrain, ArrayList<Waypoint> waypoints) {
     this.intention = intention;
     this.inTrain = inTrain;
     
-    this.radius = 4;
+    this.radius = 5;
     this.location = spawn();
     this.velocity = new PVector(0, 0);
     this.acceleration = new PVector(0, 0);
@@ -36,7 +36,7 @@ class Person {
    * Finds the closest waypoint to the initial location of the Person.
    * Requires that waypoints is non-empty
    */
-  Waypoint findFirstWaypoint(HashSet<Waypoint> waypoints) {
+  Waypoint findFirstWaypoint(ArrayList<Waypoint> waypoints) {
     float smallestDistance = Float.POSITIVE_INFINITY;
     Waypoint nearestWaypoint = null;
     
@@ -88,10 +88,13 @@ class Person {
   }
   
   void defaultVelocity() {
-    if (intention == Intention.STATIONARY) this.velocity = new PVector(0,0);
-    
-    PVector displacement = this.displacementVector(this.nearestWaypoint.location);
-    this.velocity = displacement.setMag(5);
+    if (intention == Intention.STATIONARY) {
+      this.velocity = new PVector(0,0);
+    }
+    else {
+      PVector displacement = this.displacementVector(this.nearestWaypoint.location);
+      this.velocity = displacement.setMag(5);
+    }
   }
   
   /**
@@ -103,10 +106,12 @@ class Person {
     
     else if (intention == Intention.STATIONARY && actuallyInTrain) {
       intention = Intention.EXITING;
+      nearestWaypoint = findFirstWaypoint(waypoints);
     }
     
     else if (intention == Intention.STATIONARY && ! actuallyInTrain) {
       intention = Intention.ENTERING;
+      nearestWaypoint = findFirstWaypoint(waypoints);
     }
   }
   
@@ -116,42 +121,31 @@ class Person {
     return new PVector(dx, dy);
   }
   
-  //void setLocation(float dx, float dy) {
-  //  this.location.x = dx;
-  //  this.location.y = dy;
-  //}
-  
-  //void setVelocity(float vx, float vy) {
-  //  this.velocity.x = vx;
-  //  this.velocity.y = vy;
-  //}
-  
-  //void setAcceleration(float ax, float ay) {
-  //  this.acceleration.x = ax;
-  //  this.acceleration.y = ay;
-  //}
-  
   void update(ArrayList<Person> people, Train train) {
     defaultVelocity();
+    this.acceleration = new PVector(0,0);
     collisionDetection(people, train);
     velocity.add(acceleration);
     location.add(velocity);
     
-    boolean actuallyInTrain = train.contains(this.location);
-    switchIntention(actuallyInTrain);
+    //boolean actuallyInTrain = train.contains(this.location);
+    //switchIntention(actuallyInTrain);
   }
   
   void draw() {
+    update(people, train);
     circle(location.x, location.y, radius);
     switch(this.intention) {
+      case STATIONARY:
+      stroke(200); break;
       case ENTERING:
-      stroke(0, 255, 255);
+      stroke(0, 255, 0); break;
       case EXITING:
-      stroke(255, 206, 0);
+      stroke(255, 0, 0); break;
       default:
-      stroke(200);
+      break;
     }
+    // colorblind fills: entering is (0, 255, 255), exiting is (255, 206, 0)
     fill(0);
-    circle(location.x, location.y, radius);
   }
 }
