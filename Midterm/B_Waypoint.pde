@@ -1,9 +1,9 @@
 class Waypoint {
-  private final PVector location;
-  private final boolean endpoint; // ex. waypoints inside the train, exits from the platform
+  final PVector location;
+  final boolean endpoint; // ex. waypoints inside the train, exits from the platform
   // we want different waypoints for people entering the train than exiting the train
-  private final Intention intention;
-  private ArrayList<Waypoint> nextOptions;
+  final Intention intention;
+  ArrayList<Waypoint> nextOptions;
   
   Waypoint (PVector location, Intention intention, boolean endpoint) {
     this.location = location;
@@ -18,7 +18,6 @@ class Waypoint {
   
   void draw() {
     noStroke();
-    circle(this.location.x, this.location.y, 8);
     switch(this.intention) {
       case ENTERING:
       fill(0, 255, 0, 75); break;
@@ -27,6 +26,6 @@ class Waypoint {
       default:
       throw new RuntimeException("why?");
     }
-    System.out.println(this.location);
+    circle(this.location.x, this.location.y, 8);
   }
 }

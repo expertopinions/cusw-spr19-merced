@@ -60,9 +60,19 @@ class Person {
       return null;
     }
     
-    ArrayList<Waypoint> waypoints = nearestWaypoint.nextOptions;
-    int numWaypoints = waypoints.size();
-    return waypoints.get((int)random(numWaypoints));
+    ArrayList<Waypoint> nextWaypoints = nearestWaypoint.nextOptions;
+    int index = (int)random(nextWaypoints.size());
+    return nextWaypoints.get(index);
+  }
+  
+  void updateWaypoint() {
+    if (nearestWaypoint == null) return;
+    
+    float distanceToWaypoint = dist(location.x, location.y,
+            nearestWaypoint.location.x, nearestWaypoint.location.y);
+    if (distanceToWaypoint < radius * 2.5) {
+      nearestWaypoint = findNextWaypoint();
+    }
   }
   
   void collisionDetection(ArrayList<Person> people, Train train) {
@@ -74,7 +84,7 @@ class Person {
       
       if (this.location.dist(p.location) < 2.5 * radius) {
         PVector displacement = this.displacementVector(p.location);
-        PVector force = displacement.setMag(-0.25/displacement.magSq());
+        PVector force = displacement.setMag(0.25/displacement.magSq());
         this.acceleration.add(force);
       }
     }
@@ -93,7 +103,7 @@ class Person {
     }
     else {
       PVector displacement = this.displacementVector(this.nearestWaypoint.location);
-      this.velocity = displacement.setMag(5);
+      this.velocity = displacement.setMag(1);
     }
   }
   
@@ -124,9 +134,10 @@ class Person {
   void update(ArrayList<Person> people, Train train) {
     defaultVelocity();
     this.acceleration = new PVector(0,0);
-    collisionDetection(people, train);
+    //collisionDetection(people, train);
     velocity.add(acceleration);
     location.add(velocity);
+    updateWaypoint();
     
     //boolean actuallyInTrain = train.contains(this.location);
     //switchIntention(actuallyInTrain);
@@ -134,7 +145,6 @@ class Person {
   
   void draw() {
     update(people, train);
-    circle(location.x, location.y, radius);
     switch(this.intention) {
       case STATIONARY:
       stroke(200); break;
@@ -147,5 +157,6 @@ class Person {
     }
     // colorblind fills: entering is (0, 255, 255), exiting is (255, 206, 0)
     fill(0);
+    circle(location.x, location.y, radius);
   }
 }

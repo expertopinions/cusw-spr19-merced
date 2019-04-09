@@ -28,6 +28,23 @@ Platform getPlatform() {
   return new Platform(new PVector(100, 200), new PVector(700, 500));
 }
 
+ArrayList<Waypoint> getWaypointsSmall() {
+  ArrayList<Waypoint> waypointList = new ArrayList<Waypoint>();
+  
+  Waypoint w0 = new Waypoint(new PVector(215, 190), Intention.EXITING, true);
+  Waypoint w1 = new Waypoint(new PVector(400, 190), Intention.ENTERING, true);
+  waypointList.add(w0); // 0
+  waypointList.add(w1); // 1
+  
+  return waypointList;
+}
+
+ArrayList<Person> getPeopleSmall() {
+  ArrayList<Person> people = new ArrayList<Person>();
+  people.add(new Person(Intention.ENTERING, false, waypoints));
+  return people;
+}
+
 ArrayList<Waypoint> getWaypoints() {
   ArrayList<Waypoint> waypointList = new ArrayList<Waypoint>();
   
@@ -37,9 +54,9 @@ ArrayList<Waypoint> getWaypoints() {
   waypointList.add(new Waypoint(new PVector(585, 190), Intention.ENTERING, false)); // 2
   
   // waypoints just after the entrance
-  waypointList.add(new Waypoint(new PVector(215, 210), Intention.ENTERING, false)); // 3
-  waypointList.add(new Waypoint(new PVector(400, 210), Intention.ENTERING, false));
-  waypointList.add(new Waypoint(new PVector(585, 210), Intention.ENTERING, false));
+  waypointList.add(new Waypoint(new PVector(215, 210), Intention.EXITING, false)); // 3
+  waypointList.add(new Waypoint(new PVector(400, 210), Intention.EXITING, false));
+  waypointList.add(new Waypoint(new PVector(585, 210), Intention.EXITING, false));
   
   // waypoints well into the entrance
   waypointList.add(new Waypoint(new PVector(215, 150), Intention.ENTERING, false)); // 6
@@ -58,9 +75,9 @@ ArrayList<Waypoint> getWaypoints() {
   waypointList.add(new Waypoint(new PVector(585, 300), Intention.EXITING, false));
   
   // waypoints to "exit" the platform
-  waypointList.add(new Waypoint(new PVector(100, 475), Intention.ENTERING, true)); // 16
-  waypointList.add(new Waypoint(new PVector(400, 475), Intention.ENTERING, true));
-  waypointList.add(new Waypoint(new PVector(700, 475), Intention.ENTERING, true));
+  waypointList.add(new Waypoint(new PVector(100, 475), Intention.EXITING, true)); // 16
+  waypointList.add(new Waypoint(new PVector(400, 475), Intention.EXITING, true));
+  waypointList.add(new Waypoint(new PVector(700, 475), Intention.EXITING, true));
   
   
   // linking the waypoints using a whole host of magic numbers
