@@ -97,8 +97,8 @@ class Train {
   }
   
   boolean contains(PVector that) {
-    return (that.x > upperLeft.x || that.x < lowerRight.x
-         || that.y > upperLeft.y || that.y < lowerRight.y);
+    return (that.x > upperLeft.x && that.x < lowerRight.x
+         && that.y > upperLeft.y && that.y < lowerRight.y);
   }
   
   /**

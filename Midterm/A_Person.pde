@@ -140,8 +140,9 @@ class Person {
     location.add(velocity);
     updateWaypoint();
     
-    //boolean actuallyInTrain = train.contains(this.location);
-    //switchIntention(actuallyInTrain);
+    boolean actuallyInTrain = train.contains(this.location);
+    switchIntention(actuallyInTrain);
+    inTrain = actuallyInTrain;
   }
   
   void draw() {
