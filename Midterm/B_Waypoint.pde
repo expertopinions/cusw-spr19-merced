@@ -1,13 +1,13 @@
 class Waypoint {
   final PVector location;
-  final boolean endpoint; // ex. waypoints inside the train, exits from the platform
+  final WaypointType type; // ex. waypoints inside the train, exits from the platform
   // we want different waypoints for people entering the train than exiting the train
   final Intention intention;
   ArrayList<Waypoint> nextOptions;
   
-  Waypoint (PVector location, Intention intention, boolean endpoint) {
+  Waypoint (PVector location, Intention intention, WaypointType type) {
     this.location = location;
-    this.endpoint = endpoint;
+    this.type = type;
     this.intention = intention;
     this.nextOptions = new ArrayList<Waypoint>();
   }
@@ -20,9 +20,9 @@ class Waypoint {
     noStroke();
     switch(this.intention) {
       case ENTERING:
-      fill(0, 255, 0, 75); break;
+      fill(0, 255, 255, 75); break;
       case EXITING:
-      fill(255, 0, 0, 75); break;
+      fill(255, 206, 0, 75); break;
       default:
       throw new RuntimeException("why?");
     }

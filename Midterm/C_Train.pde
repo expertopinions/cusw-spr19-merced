@@ -130,11 +130,12 @@ class Train {
       }
     }
     
-    result = new PVector(closestPoint.x - point.x, closestPoint.y - point.y);
+    result = new PVector(closestPoint.x, closestPoint.y);
     return result;
   }
   
   void draw() {
+    strokeWeight(2);
     stroke(255);
     for (PVector p : points) {
       point(p.x, p.y);

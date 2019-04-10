@@ -14,7 +14,7 @@ class Person {
     this.intention = intention;
     this.inTrain = inTrain;
     
-    this.radius = 5;
+    this.radius = 30;
     this.location = spawn();
     this.velocity = new PVector(0, 0);
     this.acceleration = new PVector(0, 0);
@@ -41,7 +41,7 @@ class Person {
     Waypoint nearestWaypoint = null;
     
     for (Waypoint w : waypoints) {
-      if (! (w.intention == this.intention)) {
+      if (! (w.intention == this.intention && w.type == WaypointType.START) ) {
         continue;
       }
       float distance = dist(this.location.x, this.location.y, w.location.x, w.location.y);
@@ -55,7 +55,9 @@ class Person {
   }
   
   Waypoint findNextWaypoint() {
-    if (nearestWaypoint.endpoint || nearestWaypoint == null || intention == Intention.STATIONARY) {
+    if (nearestWaypoint.type == WaypointType.END ||
+        nearestWaypoint == null ||
+        intention == Intention.STATIONARY) {
       intention = Intention.STATIONARY;
       return null;
     }
@@ -70,30 +72,28 @@ class Person {
     
     float distanceToWaypoint = dist(location.x, location.y,
             nearestWaypoint.location.x, nearestWaypoint.location.y);
-    if (distanceToWaypoint < radius * 2.5) {
+    if (distanceToWaypoint < radius) {
       nearestWaypoint = findNextWaypoint();
     }
   }
   
   void collisionDetection(ArrayList<Person> people, Train train) {
-    // reset acceleration before applying all the forces
-    this.acceleration = new PVector(0, 0);
     
     for (Person p : people) {
       if (p == this) continue;
       
-      if (this.location.dist(p.location) < 2.5 * radius) {
+      if (this.location.dist(p.location) < 2 * radius) {
         PVector displacement = this.displacementVector(p.location);
-        PVector force = displacement.setMag(0.25/displacement.magSq());
-        this.acceleration.add(force);
+        PVector force = displacement.setMag(300/displacement.magSq());
+        this.acceleration.sub(force);
       }
     }
     
     PVector nearestTrainPoint = train.nearestPointOnTrain(this.location);
-    if (nearestTrainPoint.mag() < 1.5 * radius) {
+    if (this.location.dist(nearestTrainPoint) < 1.1 * radius) {
       PVector displacement = this.displacementVector(nearestTrainPoint);
-      PVector force = displacement.setMag(-0.25/displacement.magSq());
-      this.acceleration.add(force);
+      PVector force = displacement.setMag(50/displacement.magSq());
+      this.acceleration.sub(force);
     }
   }
   
@@ -132,9 +132,10 @@ class Person {
   }
   
   void update(ArrayList<Person> people, Train train) {
-    defaultVelocity();
+    // reset acceleration before applying all the forces
     this.acceleration = new PVector(0,0);
-    //collisionDetection(people, train);
+    defaultVelocity();
+    collisionDetection(people, train);
     velocity.add(acceleration);
     location.add(velocity);
     updateWaypoint();
@@ -144,18 +145,17 @@ class Person {
   }
   
   void draw() {
-    update(people, train);
+    strokeWeight(3);
     switch(this.intention) {
       case STATIONARY:
       stroke(200); break;
       case ENTERING:
-      stroke(0, 255, 0); break;
+      stroke(0, 255, 255); break;
       case EXITING:
-      stroke(255, 0, 0); break;
+      stroke(255, 206, 0); break;
       default:
       break;
     }
-    // colorblind fills: entering is (0, 255, 255), exiting is (255, 206, 0)
     fill(0);
     circle(location.x, location.y, radius);
   }

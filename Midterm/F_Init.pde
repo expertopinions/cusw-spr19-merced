@@ -3,6 +3,10 @@ Train getTrain() {
   return new Train(new PVector(100, 100), new PVector(700, 200), openings);
 }
 
+Platform getPlatform() {
+  return new Platform(new PVector(100, 200), new PVector(700, 500));
+}
+
 ArrayList<ArrayList<PVector>> getOpenings() {
   ArrayList<ArrayList<PVector>> openings = new ArrayList<ArrayList<PVector>>();
   
@@ -24,15 +28,11 @@ ArrayList<ArrayList<PVector>> getOpenings() {
   return openings;
 }
 
-Platform getPlatform() {
-  return new Platform(new PVector(100, 200), new PVector(700, 500));
-}
-
 ArrayList<Waypoint> getWaypointsSmall() {
   ArrayList<Waypoint> waypointList = new ArrayList<Waypoint>();
   
-  Waypoint w0 = new Waypoint(new PVector(215, 190), Intention.EXITING, true);
-  Waypoint w1 = new Waypoint(new PVector(400, 190), Intention.ENTERING, true);
+  Waypoint w0 = new Waypoint(new PVector(215, 190), Intention.EXITING, WaypointType.START);
+  Waypoint w1 = new Waypoint(new PVector(400, 190), Intention.ENTERING, WaypointType.START);
   waypointList.add(w0); // 0
   waypointList.add(w1); // 1
   
@@ -42,6 +42,7 @@ ArrayList<Waypoint> getWaypointsSmall() {
 ArrayList<Person> getPeopleSmall() {
   ArrayList<Person> people = new ArrayList<Person>();
   people.add(new Person(Intention.ENTERING, false, waypoints));
+  people.add(new Person(Intention.ENTERING, false, waypoints));
   return people;
 }
 
@@ -49,35 +50,35 @@ ArrayList<Waypoint> getWaypoints() {
   ArrayList<Waypoint> waypointList = new ArrayList<Waypoint>();
   
   // waypoints just before the entrance
-  waypointList.add(new Waypoint(new PVector(215, 190), Intention.ENTERING, false)); // 0
-  waypointList.add(new Waypoint(new PVector(400, 190), Intention.ENTERING, false)); // 1
-  waypointList.add(new Waypoint(new PVector(585, 190), Intention.ENTERING, false)); // 2
+  waypointList.add(new Waypoint(new PVector(215, 190), Intention.ENTERING, WaypointType.START)); // 0
+  waypointList.add(new Waypoint(new PVector(400, 190), Intention.ENTERING, WaypointType.START)); // 1
+  waypointList.add(new Waypoint(new PVector(585, 190), Intention.ENTERING, WaypointType.START)); // 2
   
   // waypoints just after the entrance
-  waypointList.add(new Waypoint(new PVector(215, 210), Intention.EXITING, false)); // 3
-  waypointList.add(new Waypoint(new PVector(400, 210), Intention.EXITING, false));
-  waypointList.add(new Waypoint(new PVector(585, 210), Intention.EXITING, false));
+  waypointList.add(new Waypoint(new PVector(215, 210), Intention.EXITING, WaypointType.START)); // 3
+  waypointList.add(new Waypoint(new PVector(400, 210), Intention.EXITING, WaypointType.START));
+  waypointList.add(new Waypoint(new PVector(585, 210), Intention.EXITING, WaypointType.START));
   
   // waypoints well into the entrance
-  waypointList.add(new Waypoint(new PVector(215, 150), Intention.ENTERING, false)); // 6
-  waypointList.add(new Waypoint(new PVector(400, 150), Intention.ENTERING, false));
-  waypointList.add(new Waypoint(new PVector(585, 150), Intention.ENTERING, false));
+  waypointList.add(new Waypoint(new PVector(215, 150), Intention.ENTERING, WaypointType.MIDDLE)); // 6
+  waypointList.add(new Waypoint(new PVector(400, 150), Intention.ENTERING, WaypointType.MIDDLE));
+  waypointList.add(new Waypoint(new PVector(585, 150), Intention.ENTERING, WaypointType.MIDDLE));
   
   // waypoints for people in the train to get out of the way
-  waypointList.add(new Waypoint(new PVector(150, 150), Intention.ENTERING, true)); // 9
-  waypointList.add(new Waypoint(new PVector(308, 150), Intention.ENTERING, true));
-  waypointList.add(new Waypoint(new PVector(492, 150), Intention.ENTERING, true));
-  waypointList.add(new Waypoint(new PVector(650, 150), Intention.ENTERING, true));
+  waypointList.add(new Waypoint(new PVector(150, 150), Intention.ENTERING, WaypointType.END)); // 9
+  waypointList.add(new Waypoint(new PVector(308, 150), Intention.ENTERING, WaypointType.END));
+  waypointList.add(new Waypoint(new PVector(492, 150), Intention.ENTERING, WaypointType.END));
+  waypointList.add(new Waypoint(new PVector(650, 150), Intention.ENTERING, WaypointType.END));
   
   // waypoints well into the platform
-  waypointList.add(new Waypoint(new PVector(215, 300), Intention.EXITING, false)); // 13
-  waypointList.add(new Waypoint(new PVector(400, 300), Intention.EXITING, false));
-  waypointList.add(new Waypoint(new PVector(585, 300), Intention.EXITING, false));
+  waypointList.add(new Waypoint(new PVector(215, 300), Intention.EXITING, WaypointType.MIDDLE)); // 13
+  waypointList.add(new Waypoint(new PVector(400, 300), Intention.EXITING, WaypointType.MIDDLE));
+  waypointList.add(new Waypoint(new PVector(585, 300), Intention.EXITING, WaypointType.MIDDLE));
   
   // waypoints to "exit" the platform
-  waypointList.add(new Waypoint(new PVector(100, 475), Intention.EXITING, true)); // 16
-  waypointList.add(new Waypoint(new PVector(400, 475), Intention.EXITING, true));
-  waypointList.add(new Waypoint(new PVector(700, 475), Intention.EXITING, true));
+  waypointList.add(new Waypoint(new PVector(100, 475), Intention.EXITING, WaypointType.END)); // 16
+  waypointList.add(new Waypoint(new PVector(400, 475), Intention.EXITING, WaypointType.END));
+  waypointList.add(new Waypoint(new PVector(700, 475), Intention.EXITING, WaypointType.END));
   
   
   // linking the waypoints using a whole host of magic numbers
@@ -104,7 +105,7 @@ ArrayList<Waypoint> getWaypoints() {
 }
 
 ArrayList<Person> getPeople() {
-  return getPeople(10, 10, .5, .5);
+  return getPeople(10, 20, .5, .5);
 }
 
 ArrayList<Person> getPeople(int numInTrain, int numOutsideTrain, double p_exit, double p_enter) {
