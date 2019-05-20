@@ -10,7 +10,8 @@ public boolean PATIENT_DEFAULT = false;
 // walks toward the center of the train
 public boolean courteous;
 
-boolean run; // run simulation
+boolean run;  // run simulation
+boolean step; // run simulation only one step
 boolean saveFrames; // save images to file
 int frames;
 int anim;
@@ -30,6 +31,7 @@ void init(boolean _patient) {
   anim = 0;
   
   toggleRun(false);
+  toggleStep(false);
   toggleSaveFrames(false);
 }
 
@@ -45,7 +47,7 @@ void draw() {
   //  w.draw();
   //}
 
-  if(run) {
+  if(run || step) {
     for (Person p : people) {
       p.update(people, train);
     }
@@ -68,7 +70,7 @@ void draw() {
   //  + "\"" + String.format("%02d", frames % 60) + "f", 100, 50);
   text("frames: " + frames, 100, 50);
   
-  if(run) {
+  if(run || step) {
     
     if(stillEntering > 0) 
       frames++;
@@ -77,6 +79,8 @@ void draw() {
       saveFrame("frames/"+String.format("%04d",anim)+".tga");
       anim++;
     }
+    
+    toggleStep(false);
   }
 }
 
@@ -98,6 +102,9 @@ void keyPressed() {
     case 'r':
       toggleRun(!run);
       break;
+    case 't':
+      toggleStep(!step);
+      break;
     case 's':
       toggleSaveFrames(!saveFrames);
       break;
@@ -112,4 +119,9 @@ void toggleSaveFrames(boolean _saveFrames) {
 void toggleRun(boolean _run) {
   run = _run;
   println("Run Simulation: " + run);
+}
+
+void toggleStep(boolean _step) {
+  step = _step;
+  println("Step Simulation: " + step);
 }
